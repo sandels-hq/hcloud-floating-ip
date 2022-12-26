@@ -4,9 +4,17 @@
 
 - Assign two floating ip's for a and b daemonsets and set corresponding variables on configmap YAMLs.
 
-- Create hcloud api token secret: `kubectl -n kube-system create secret generic hcloud --from-literal=token=<HCLOUD API TOKEN>`
+- Create hcloud api token secret: 
+```
+kubectl -n kube-system create secret generic hcloud \
+--from-literal=token=<HCLOUD API TOKEN>
+```
 
-- Create keepalived password secret: `kubectl -n kube-system create secret generic floating-ip --from-literal=keepalived_password=<KEEPALIVED PASSWORD, MAX 8 CHARACTERS>`
+- Create keepalived password secret: 
+```
+kubectl -n kube-system create secret generic floating-ip \
+--from-literal=keepalived_password=<KEEPALIVED PASSWORD, MAX 8 CHARACTERS>
+```
 
 - Apply YAMLs:
 ```
