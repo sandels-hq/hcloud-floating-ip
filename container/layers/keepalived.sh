@@ -5,11 +5,12 @@ tailer /tmp/keepalived.log &
 PRIVATE_IP=$(kubectl get node -o wide | grep $HOSTNAME | awk '{ print $6 }')
 PRIVATE_INTERFACE=$(ip addr | grep "inet " | grep $(kubectl get node -o wide | grep $HOSTNAME | awk '{ print $6 }') | awk '{ print $8 }')
 FLOATING_INTERFACE_BASE=$(echo $FLOATING_INTERFACE | awk -F':' '{ print $1 }')
+FLOATING_TABLE=$(echo $FLOATING_IP | sed -e 's/\.//g' | cut -c 2-)
 
 cp /etc/keepalived/keepalived.conf.template /etc/keepalived/keepalived.conf
 
 if [ "$HOSTNAME" == "$MASTER_NODE" ]; then
-    KEEPALIVED_STATE="MASTER"
+    KEEPALIVED_STATE="BACKUP"
     KEEPALIVED_PRIORITY="250"
     sed -i -e 's/STARTUP_SCRIPT/startup_script \/master.sh/g' /etc/keepalived/keepalived.conf
 else
@@ -39,5 +40,6 @@ sed -i -e "s/KEEPALIVED_PASSWORD/$KEEPALIVED_PASSWORD/g" /etc/keepalived/keepali
 sed -i -e "s/FLOATING_IP/$FLOATING_IP/g" /etc/keepalived/keepalived.conf
 sed -i -e "s/FLOATING_INTERFACE_BASE/$FLOATING_INTERFACE_BASE/g" /etc/keepalived/keepalived.conf
 sed -i -e "s/FLOATING_INTERFACE/$FLOATING_INTERFACE/g" /etc/keepalived/keepalived.conf
+sed -i -e "s/FLOATING_TABLE/$FLOATING_TABLE/g" /etc/keepalived/keepalived.conf
 
 keepalived -n -G -l -D -f /etc/keepalived/keepalived.conf
