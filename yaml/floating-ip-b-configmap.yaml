@@ -4,12 +4,17 @@ metadata:
   name: floating-ip-b
   namespace: kube-system
 data:
-  DOMAIN: "<DOMAIN USED ON SERVER HOSTNAMES>"
-  FLOATING_IP: "<FLOATING IP>"
-  FLOATING_IP_ID: "<FLOATING IP ID ON HETZNER>"
-  FLOATING_INTERFACE: "eth0:2"
-  MASTER_NODE: "<PREFERRED MASTER NODE HOSTNAME>"
+  DOMAIN: "j3s.fi"
+  FLOATING_IP: "95.217.240.13"
+  FLOATING_IP_ID: "18332430"
+  FLOATING_INTERFACE: "eth0"           
+  MASTER_NODE: "worker-cx21-2"
   keepalived.conf: |
+    global_defs {
+        max_auto_priority 99
+        enable_script_security
+        script_user root
+    }
     vrrp_script check_floating_ip {
         script "/check.sh"
         user root
@@ -22,11 +27,24 @@ data:
         state KEEPALIVED_STATE
         priority KEEPALIVED_PRIORITY
         garp_master_delay 5
-
-        advert_int 3
+        preempt_delay 300
+        advert_int 1
         virtual_router_id 12
         unicast_src_ip PRIVATE_IP
         UNICAST_PEERS
+
+        virtual_ipaddress {
+            FLOATING_IP dev FLOATING_INTERFACE
+        }
+
+        virtual_rules {
+            from FLOATING_IP table FLOATING_TABLE priority 1000
+        }
+
+        virtual_routes {
+            172.31.1.1 dev FLOATING_INTERFACE table FLOATING_TABLE
+            default via 172.31.1.1 dev FLOATING_INTERFACE table FLOATING_TABLE
+        }
 
         authentication {
             auth_type PASS
@@ -38,5 +56,5 @@ data:
         }
 
         notify_master "/master.sh"
-        notify_backup "/backup.sh"
+        #notify_backup "/backup.sh"
     }
