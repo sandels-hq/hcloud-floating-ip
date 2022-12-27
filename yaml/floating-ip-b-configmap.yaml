@@ -4,11 +4,11 @@ metadata:
   name: floating-ip-b
   namespace: kube-system
 data:
-  DOMAIN: "j3s.fi"
-  FLOATING_IP: "95.217.240.13"
-  FLOATING_IP_ID: "18332430"
-  FLOATING_INTERFACE: "eth0"           
-  MASTER_NODE: "worker-cx21-2"
+  DOMAIN: "<DOMAIN USED ON SERVER HOSTNAMES>"
+  FLOATING_IP: "<HETZNER FLOATING IP B>"
+  FLOATING_IP_ID: "<HETZNER FLOATING IP B ID>"
+  FLOATING_INTERFACE: "eth0"
+  MASTER_NODE: "<PREFERRED MASTER NODE HOSTNAME>"
   keepalived.conf: |
     global_defs {
         max_auto_priority 99
