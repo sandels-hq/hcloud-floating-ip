@@ -4,6 +4,14 @@
 
 - Create two floating ip's on Hetzner Cloud console for a and b daemonsets and set corresponding variables on configmap YAMLs.
 
+```
+  DOMAIN: "<DOMAIN USED ON SERVER HOSTNAMES>" # Domain name used on server hostnames. Will be used on hcloud commands to identify servers.
+  FLOATING_IP: "<HETZNER FLOATING IP A/B>" # Floating IP address
+  FLOATING_IP_ID: "<HETZNER FLOATING IP A/B ID>" # Floating ip ID can be seen from Cloud console or which `hcloud floating-ip list`.
+  FLOATING_INTERFACE: "eth0" # Default is eth0 for cloud server public ip's
+  MASTER_NODE: "<PREFERRED MASTER NODE HOSTNAME>" # Set different preferred node for a and b to keep ip's assigned to different nodes
+```
+
 - Create hcloud api token secret:
 
 ```
