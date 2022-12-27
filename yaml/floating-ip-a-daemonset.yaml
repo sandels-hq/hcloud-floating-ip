@@ -18,13 +18,13 @@ spec:
       hostNetwork: true
       containers:
         - name: floating-ip
-          image: ghcr.io/mattirantakomi/hcloud-floating-ip:latest
+          image: ghcr.io/sandels-hq/hcloud-floating-ip:latest
           volumeMounts:
-          - name: config
-            mountPath: /etc/keepalived/keepalived.conf.template
-            subPath: keepalived.conf
-          - mountPath: /dev
-            name: dev            
+            - name: config
+              mountPath: /etc/keepalived/keepalived.conf.template
+              subPath: keepalived.conf
+            - mountPath: /dev
+              name: dev
           resources:
             requests:
               memory: "64Mi"
@@ -33,47 +33,47 @@ spec:
               memory: "1Gi"
               cpu: "1"
           env:
-          - name: HCLOUD_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: hcloud
-                key: token
-          - name: DOMAIN
-            valueFrom:
-              configMapKeyRef:
-                name: floating-ip-a
-                key: DOMAIN
-          - name: FLOATING_IP
-            valueFrom:
-              configMapKeyRef:
-                name: floating-ip-a
-                key: FLOATING_IP
-          - name: FLOATING_IP_ID
-            valueFrom:
-              configMapKeyRef:
-                name: floating-ip-a
-                key: FLOATING_IP_ID
-          - name: FLOATING_INTERFACE
-            valueFrom:
-              configMapKeyRef:
-                name: floating-ip-a
-                key: FLOATING_INTERFACE
-          - name: MASTER_NODE
-            valueFrom:
-              configMapKeyRef:
-                name: floating-ip-a
-                key: MASTER_NODE
-          - name: KEEPALIVED_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: floating-ip
-                key: keepalived_password
+            - name: HCLOUD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hcloud
+                  key: token
+            - name: DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: floating-ip-a
+                  key: DOMAIN
+            - name: FLOATING_IP
+              valueFrom:
+                configMapKeyRef:
+                  name: floating-ip-a
+                  key: FLOATING_IP
+            - name: FLOATING_IP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: floating-ip-a
+                  key: FLOATING_IP_ID
+            - name: FLOATING_INTERFACE
+              valueFrom:
+                configMapKeyRef:
+                  name: floating-ip-a
+                  key: FLOATING_INTERFACE
+            - name: MASTER_NODE
+              valueFrom:
+                configMapKeyRef:
+                  name: floating-ip-a
+                  key: MASTER_NODE
+            - name: KEEPALIVED_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: floating-ip
+                  key: keepalived_password
           securityContext:
             capabilities:
               add:
-              - NET_ADMIN
-              - NET_BROADCAST
-              - NET_RAW          
+                - NET_ADMIN
+                - NET_BROADCAST
+                - NET_RAW
             privileged: true
       volumes:
         - name: config
